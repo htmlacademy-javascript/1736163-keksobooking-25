@@ -41,6 +41,10 @@ function getRandomPositiveInteger (a, b) {
   return Math.floor(result);
 }
 
+function getRandomNumber(from, to) {
+  return Math.floor(Math.random() * (to - from + 1)) + from;
+}
+
 function getFeaturesArray() {
   const maxLength = FEATURES_LIST.length;
   const lengthOfArray = getRandomNumber(1, maxLength);
@@ -55,10 +59,6 @@ function getFeaturesArray() {
     }
   }
   return array;
-
-  function getRandomNumber(from, to) {
-    return Math.floor(Math.random() * (to - from + 1)) + from;
-  }
 }
 
 function getPhotosArray() {
@@ -75,21 +75,20 @@ function getPhotosArray() {
     }
   }
   return array;
-
-  function getRandomNumber(from, to) {
-    return Math.floor(Math.random() * (to - from + 1)) + from;
-  }
 }
 
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
+function getRandomArrayElement (elements) {
+  return elements[getRandomPositiveInteger(0, elements.length - 1)];
+}
 
-const getCoordinatesValue = () => ({
-  lat: Number(getRandomNumberInclusive(35.65000, 35.70000, 5)),
-  lng: Number(getRandomNumberInclusive(139.70000, 139.80000, 5))
-});
+function getCoordinatesValue () {
+  return {
+    lat: Number(getRandomNumberInclusive(35.65000, 35.70000, 5)),
+    lng: Number(getRandomNumberInclusive(139.70000, 139.80000, 5))
+  };
+}
 
-
-const createAuthorKeys = () => {
+function createAuthorKeys ()  {
   pictureCounter +=1;
   pictureNumber = pictureCounter;
   if (pictureNumber < 10) {
@@ -98,7 +97,7 @@ const createAuthorKeys = () => {
   return {
     avatar: `img/avatars/user${  pictureNumber  }.png`
   };
-};
+}
 
 function createOfferKeys  ()  {
   locationKeys = getCoordinatesValue();
@@ -117,12 +116,14 @@ function createOfferKeys  ()  {
   };
 }
 
-const createMainBlock = () => ({
-  author: createAuthorKeys(),
-  offer: createOfferKeys(),
-  location: locationKeys
-});
+function createMainBlock () {
+  return {
+    author: createAuthorKeys(),
+    offer: createOfferKeys(),
+    location: locationKeys
+  };
+}
 
-const similarOffers = Array.from({length: 10}, createMainBlock);
+const simillarOffers = Array.from({length: 10}, createMainBlock);
 
 
