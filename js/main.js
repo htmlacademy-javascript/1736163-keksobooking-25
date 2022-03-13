@@ -125,5 +125,3 @@ function createMainBlock () {
 }
 
 const simillarOffers = Array.from({length: 10}, createMainBlock);
-
-
