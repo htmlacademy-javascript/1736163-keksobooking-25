@@ -126,5 +126,5 @@ function createMainBlock () {
 
 const simillarOffers = Array.from({length: 10}, createMainBlock);
 
-// Added this comment to create new pullrequest
+//- Added this comment to create new pullrequest
 
