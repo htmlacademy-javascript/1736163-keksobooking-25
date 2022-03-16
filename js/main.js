@@ -124,11 +124,9 @@ function createMainBlock () {
   };
 }
 
-<<<<<<< HEAD
+
 const simillarOffers = Array.from({length: 10}, createMainBlock);
 
 //- Added this comment to create new pullrequest
 
-=======
-const simillarOffers = Array.from({length: 10}, createMainBlock);
->>>>>>> 8edd3b755e83b213750dae83c4a667f75f239196
+
