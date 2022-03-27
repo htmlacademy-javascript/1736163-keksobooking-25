@@ -1,2 +1,2 @@
-import {simillarOffers} from './data.js';
-console.log(simillarOffers);
+import {getOffer} from './offer-generation.js';
+getOffer(2);
