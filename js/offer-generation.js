@@ -3,12 +3,12 @@ import {simillarOffers} from './data.js';
 const templateElement = document.querySelector('#card').content; // весь список
 const mapElement = document.querySelector('#map-canvas'); // Карта, куда добавлять темплатку
 
-
 const getOffer = function (index) {
 
   const templateElementClone = templateElement.cloneNode(true); // создали клон
 
   const templateAuthor = templateElementClone.querySelector('.popup__avatar'); // Картинка
+
   const authorPicture = simillarOffers[index].author.avatar;
   templateAuthor.src = authorPicture;
   if (authorPicture.length < 1) {
