@@ -1028,3 +1028,7 @@ fieldset {
 .hidden {
   display: none;
 }
+.error-text {
+margin-top: 25px;
+color: red;
+}
