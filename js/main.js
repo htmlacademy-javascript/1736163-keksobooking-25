@@ -1,4 +1,4 @@
-import { getOffer } from './offer-generation.js';
 import {} from './form.js';
-getOffer(1);
+import {} from './map.js';
+import {} from './slider.js';
 
