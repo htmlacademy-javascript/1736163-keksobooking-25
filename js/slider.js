@@ -1,8 +1,5 @@
-// <div class="ad-form__slider"></div>
-/* global noUiSlider:readonly */
 const sliderElement = document.querySelector('.ad-form__slider');
 const valueElement = document.querySelector('#price');
-
 
 noUiSlider.create(sliderElement, {
   range: {
@@ -21,8 +18,6 @@ noUiSlider.create(sliderElement, {
     },
   },
 });
-
-//sliderElement.setAttribute('disabled', true);
 
 sliderElement.noUiSlider.on('update', () => {
   valueElement.value = sliderElement.noUiSlider.get();

@@ -65,8 +65,8 @@ window.onload = function () {
     return `Слишком много гостей для ${roomNumberField.value}
     ${roomNumberField.value === '1' ? 'комнаты' : 'комнат'}`;
   }
+
   pristine.addValidator(roomNumberField,validateCapacity, getRoomNumberFieldErrorMessage);
   pristine.addValidator(capacityField,validateCapacity, /*getCapacityErrorMessage*/);
 };
-
 export{};

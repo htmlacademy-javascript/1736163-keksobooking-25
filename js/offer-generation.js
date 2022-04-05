@@ -1,7 +1,6 @@
 import {simillarOffers} from './data.js';
 
 const templateElement = document.querySelector('#card').content;
-const mapElement = document.querySelector('#map-canvas'); // наш прошлый опыт
 const popupFragment = document.createDocumentFragment('span'); //коробочка
 
 
@@ -111,9 +110,6 @@ const getOffer = function (index) {
   });
 
   popupFragment.replaceChildren(templateElementClone);
-  popupFragment.className = 'popupFragment';// нужно ли?
 };
-
-//console.log(simillarOffers);
 
 export{getOffer, popupFragment};
