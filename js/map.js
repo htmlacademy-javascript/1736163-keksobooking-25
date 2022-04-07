@@ -1,5 +1,5 @@
 import {getOffer, popupFragment} from './offer-generation.js';
-import {simillarOffers} from './data.js';
+import {} from './data.js';
 
 const coordinatesInput = document.querySelector('#address');
 const map = L.map('map-canvas')
@@ -48,23 +48,15 @@ const markerIcon = L.icon({
 });
 
 const points = [];
-
-simillarOffers.forEach((offerObject) => {
-  const point = {
-    title: `${offerObject.offer.title}`,
-    lat: offerObject.location.lat,
-    lng: offerObject.location.lng
-  };
-  points.push(point);
-});
-
-const markerGroup = L.layerGroup().addTo(map);
+const serverArray = [];
 
 const createCustomPopup = (point) => {
-  getOffer(points.indexOf(point));
+  getOffer(serverArray, points.indexOf(point));
   const popupElement = popupFragment.cloneNode(true);
   return popupElement.querySelector('.popup');
 };
+
+const markerGroup = L.layerGroup().addTo(map);
 
 const createMarker = (point) => {
   const {lat, lng} = point;
@@ -83,15 +75,28 @@ const createMarker = (point) => {
   return marker;
 };
 
-points.forEach((point) => {
-  createMarker(point);
-});
+const createPointsArray = (data/*console.error()*/) => { // либо так либо хз вообще!
+  data.forEach((offerObject) => {
+    serverArray.push(offerObject);
+    const point = {
+      title: `${offerObject.offer.title}`,
+      lat: offerObject.location.lat,
+      lng: offerObject.location.lng
+    };
+    points.push(point);
+  });
+  points.forEach((point) => { // запихнул эту часть внутрь, так работает возможно тут потребуется промис
+    createMarker(point);
+  });
+};
+
 
 //markerGroup.clearLayers(); очистка маркеров
 
 const resetButton = document.querySelector('.ad-form__reset'); //пока вроде не нужно
-resetButton.addEventListener('click', () => {
-  coordinatesInput.value = '35.68011';
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  coordinatesInput.value = '35.68011, 139.76915';
   mainPinMarker.setLatLng({
     lat: 35.68011,
     lng: 139.76915,
@@ -102,4 +107,4 @@ resetButton.addEventListener('click', () => {
   }, 10);
 });
 
-export{};
+export{createPointsArray};

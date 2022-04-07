@@ -108,5 +108,5 @@ function createMainBlock () {
 }
 
 const simillarOffers = Array.from({length: 10}, createMainBlock);
-
-export {simillarOffers};
+console.log(simillarOffers)
+export {};
