@@ -17,9 +17,32 @@ function getRandomNumber(from, to) {
 function getRandomArrayElement (elements) {
   return elements[getRandomPositiveInteger(0, elements.length - 1)];
 }
-const ALERT_SHOW_TIME = 5000;
+const ALERT_SHOW_TIME = 3000;
+const submitForm = document.querySelector('.ad-form__element--submit');
+const showSubmitAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = 100;
+  alertContainer.style.position = 'static';
+  alertContainer.style.left = 0;
+  alertContainer.style.top = 100;
+  alertContainer.style.right = 0;
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'black';
+  alertContainer.style.borderRadius = '100';
+  alertContainer.style.color = '#ffaa99';
+  alertContainer.style.flex = '1';
+  alertContainer.textContent = message;
 
-const showAlert = (message) => {
+  submitForm.after(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+};
+
+const showLoadAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
   alertContainer.style.position = 'absolute';
@@ -29,15 +52,17 @@ const showAlert = (message) => {
   alertContainer.style.padding = '10px 3px';
   alertContainer.style.fontSize = '30px';
   alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'red';
-
+  alertContainer.style.backgroundColor = 'black';
+  alertContainer.style.borderRadius = '100';
+  alertContainer.style.color = '#ffaa99';
+  alertContainer.style.flex = '1';
   alertContainer.textContent = message;
 
-  document.body.append(alertContainer);
+  submitForm.after(alertContainer);
 
   setTimeout(() => {
     alertContainer.remove();
   }, ALERT_SHOW_TIME);
-}
+};
 
-export{getRandomNumberInclusive, getRandomPositiveInteger,getRandomNumber, getRandomArrayElement, showAlert};
+export{getRandomNumberInclusive, getRandomPositiveInteger,getRandomNumber, getRandomArrayElement, showSubmitAlert, showLoadAlert};

@@ -1,5 +1,5 @@
-import {sendData} from './main.js';
-import {showAlert} from './util.js';
+import {sendData} from './API.js';
+import {showSubmitAlert} from './util.js';
 const form = document.querySelector('.ad-form');   //window.onload = function () {} все было завернуто в онлоад
 const typeField = form.querySelector('#type');
 const avatarInput = form.querySelector('#avatar');
@@ -100,9 +100,8 @@ const unblockSubmitButton = () => {
 
 const setUserFormSubmit = (onSuccess) => {
   form.addEventListener('submit', (evt) => {
-    console.log('we go here')
     evt.preventDefault();
-    const isValid = pristine.validate();
+    const isValid = pristine.validate();//пока убрал сеттинг начальной точки в инпуте
     if (isValid) {
       blockSubmitButton();
       sendData(
@@ -111,7 +110,7 @@ const setUserFormSubmit = (onSuccess) => {
           unblockSubmitButton();
         },
         () => {
-          showAlert('Не удалось отправить форму. Попробуйте ещё раз');// в утиле доработать
+          showSubmitAlert('Не удалось отправить форму. Попробуйте ещё раз');// в утиле доработать
           unblockSubmitButton();
         },
         new FormData(evt.target),

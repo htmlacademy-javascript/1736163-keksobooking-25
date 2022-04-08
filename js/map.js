@@ -1,10 +1,13 @@
 import {getOffer, popupFragment} from './offer-generation.js';
 import {} from './data.js';
 
+const MAIN_PIN_MARKER_LATTITUDE = 35.680111;
+const MAIN_PIN_MARKER_LONGITUDE = 139.769152;
 const coordinatesInput = document.querySelector('#address');
+
 const map = L.map('map-canvas')
   .on('load', () => {
-    coordinatesInput.value = '35.68011, 139.76915';
+    coordinatesInput.value = `${MAIN_PIN_MARKER_LATTITUDE} ${MAIN_PIN_MARKER_LONGITUDE}`;
   })
   .setView({
     lat: 35.68011,
@@ -25,8 +28,8 @@ const mainPinIcon = L.icon({
 
 const mainPinMarker = L.marker(
   {
-    lat: 35.680111,
-    lng: 139.769152,
+    lat: MAIN_PIN_MARKER_LATTITUDE,
+    lng: MAIN_PIN_MARKER_LONGITUDE,
   },
   {
     draggable: true,
@@ -93,18 +96,6 @@ const createPointsArray = (data/*console.error()*/) => { // либо так ли
 
 //markerGroup.clearLayers(); очистка маркеров
 
-const resetButton = document.querySelector('.ad-form__reset'); //пока вроде не нужно
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  coordinatesInput.value = '35.68011, 139.76915';
-  mainPinMarker.setLatLng({
-    lat: 35.68011,
-    lng: 139.76915,
-  });
-  map.setView({
-    lat: 35.68011,
-    lng: 139.76915,
-  }, 10);
-});
 
-export{createPointsArray};
+export{createPointsArray, coordinatesInput, mainPinMarker, map, MAIN_PIN_MARKER_LATTITUDE, MAIN_PIN_MARKER_LONGITUDE};
+
