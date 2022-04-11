@@ -1,12 +1,12 @@
 import { mainPinMarker, map, coordinatesInput, MAIN_PIN_MARKER_LATTITUDE, MAIN_PIN_MARKER_LONGITUDE} from './map.js';
+import { priceInput } from './form.js';
+import {mapFilters} from './map.js';
+import {sliderElement} from './slider.js';
 
 const resetButton = document.querySelector('.ad-form__reset');
-
-const mapFilters = document.querySelector('.map__filters-container');
 const mapSelectFilters = mapFilters.querySelectorAll('select');
 const housingFeaturesBlock = document.querySelector('#housing-features');
 const mapCheckboxes = housingFeaturesBlock.querySelectorAll('.map__checkbox');
-const popupElement = document.querySelector('.popup');
 
 resetButton.addEventListener('click', () => {
 
@@ -14,11 +14,12 @@ resetButton.addEventListener('click', () => {
     select.value = 'any';
   });
 
+  // дописать удаление картинок при резете
+
   mapCheckboxes.forEach((checkbox) => {
     checkbox.checked = false;
   });
-
-  console.log('reseting')
+  priceInput.setAttribute('placeholder', '0') ;
 
   mainPinMarker.setLatLng({
     lat: 35.68011,
@@ -30,6 +31,8 @@ resetButton.addEventListener('click', () => {
   }, 10);
   map.closePopup();
   setTimeout (setCoords, 1);
+
+  sliderElement.noUiSlider.set(0);
 });
 
 function setCoords() {
@@ -40,4 +43,4 @@ function resetForm() {
   resetButton.click();
 }
 
-export{resetForm};
+export{resetForm, mapFilters};

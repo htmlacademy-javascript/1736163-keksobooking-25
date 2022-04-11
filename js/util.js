@@ -1,23 +1,37 @@
-function getRandomNumberInclusive(min, max, decimal) {
-
-  return (Math.random() * (max - min) + min).toFixed(decimal);
-}
-
-function getRandomPositiveInteger (a, b) {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-}
-
-function getRandomNumber(from, to) {
-  return Math.floor(Math.random() * (to - from + 1)) + from;
-}
-
-function getRandomArrayElement (elements) {
-  return elements[getRandomPositiveInteger(0, elements.length - 1)];
-}
 const ALERT_SHOW_TIME = 3000;
+
+// function getRandomNumberInclusive(min, max, decimal) {
+
+//   return (Math.random() * (max - min) + min).toFixed(decimal);
+// }
+
+// function getRandomPositiveInteger (a, b) {
+//   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
+//   const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+//   const result = Math.random() * (upper - lower + 1) + lower;
+//   return Math.floor(result);
+// }
+
+// function getRandomNumber(from, to) {
+//   return Math.floor(Math.random() * (to - from + 1)) + from;
+// }
+
+// function getRandomArrayElement (elements) {
+//   return elements[getRandomPositiveInteger(0, elements.length - 1)];
+// }
+
+// Дебаунс
+
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+// Всплывающий месседж об ошибке получения и отправки данных
+
 const submitForm = document.querySelector('.ad-form__element--submit');
 const showSubmitAlert = (message) => {
   const alertContainer = document.createElement('div');
@@ -65,4 +79,4 @@ const showLoadAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export{getRandomNumberInclusive, getRandomPositiveInteger,getRandomNumber, getRandomArrayElement, showSubmitAlert, showLoadAlert};
+export{/*getRandomNumberInclusive, getRandomPositiveInteger,getRandomNumber, getRandomArrayElement*/showSubmitAlert, showLoadAlert, debounce};

@@ -1,9 +1,4 @@
 import {showLoadAlert} from './util.js';
-import {resetForm} from './reset.js';
-import {setUserFormSubmit} from './form.js';
-import {createPointsArray} from './map.js';
-
-const SIMILAR_OFFER_COUNT = 10;
 
 const getData = (onSucsess, onFail) =>  {
   fetch('https://25.javascript.pages.academy/keksobooking/data')
@@ -26,11 +21,6 @@ const getData = (onSucsess, onFail) =>  {
       showLoadAlert(err);
     });
 };
-
-
-getData((data) => {
-  createPointsArray(data.slice(0, SIMILAR_OFFER_COUNT));
-});
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(

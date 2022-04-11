@@ -1,9 +1,17 @@
 import {setUserFormSubmit} from './form.js';
-import {createPointsArray} from './map.js';
-import {} from './slider.js';
 import {resetForm} from './reset.js';
-import {showLoadAlert} from './util.js';
-import {} from './API.js';
+import {debounce} from './util.js';
+import {getData} from './API.js';
+import {renderPoints} from './map.js';
+import {setTypeFilterClick} from './map.js';
+import {} from './image-preview.js';
+
+const RERENDER_DELAY = 500;
 
 setUserFormSubmit(resetForm);
-//throw new Error (`${response.status} ${response.statusText}`);
+
+getData((data) => {
+  renderPoints(data);
+  setTypeFilterClick(debounce(() => renderPoints(data), RERENDER_DELAY));
+});
+

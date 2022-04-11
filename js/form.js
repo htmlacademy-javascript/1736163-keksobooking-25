@@ -1,31 +1,18 @@
 import {sendData} from './API.js';
 import {showSubmitAlert} from './util.js';
-const form = document.querySelector('.ad-form');   //window.onload = function () {} все было завернуто в онлоад
+
+const form = document.querySelector('.ad-form');
 const typeField = form.querySelector('#type');
-const avatarInput = form.querySelector('#avatar');
-const imagesInput = form.querySelector('#images');
-const preview = form.querySelector('.ad-form-header__preview');
-const imagePlaceholder = preview.querySelector('img');
 const submitButton = form.querySelector('.ad-form__submit');
-
-let minPrice = 0;
-
-
-avatarInput.addEventListener('change', (evt) => {//работает но размер фото...разобраться
-  const [file] = evt.target.files;
-  if (file) {
-    imagePlaceholder.setAttribute('src', '');
-    imagePlaceholder.src = URL.createObjectURL(file);
-  }
-});
-
-imagesInput.addEventListener('change', (evt) => {
-  const [file] = evt.target.files;
-  if (file) {
-    //вписать создание элемента img и аппенда его в форму
-  }
-});
-
+const priceInput = form.querySelector('#price');
+const roomNumberField = form.querySelector('[name = "rooms"]');
+const capacityField = form.querySelector('[name = "capacity"]');
+const capacityOption = {
+  '1':['1'],
+  '2':['1', '2'],
+  '3':['1', '2', '3'],
+  '100':['0']
+};
 const pristine = new Pristine(form, {
   classTo: 'ad-form__element',
   errorTextParent: 'ad-form__element',
@@ -34,6 +21,11 @@ const pristine = new Pristine(form, {
   successClass: 'ad-form__element--valid',
   errorTextTag: 'span'
 });
+const timeinSelector = form.querySelector('#timein');
+const timeoutSelector = form.querySelector('#timeout');
+let minPrice = 0;
+
+// Валидация формы (Pristine)
 
 typeField.addEventListener('change', minPriceThreshold);
 
@@ -55,22 +47,12 @@ function minPriceThreshold(evt) {
       minPrice = 10000;
       break;
   }
+  priceInput.setAttribute('placeholder', `${minPrice}`) ;
 }
 
 function validatePrice(value) {
   return value >= minPrice;
 }
-
-pristine.addValidator(form.querySelector('#price'), validatePrice, 'Цена ниже минимального значения');
-
-const roomNumberField = form.querySelector('[name = "rooms"]');
-const capacityField = form.querySelector('[name = "capacity"]');
-const capacityOption = {
-  '1':['1'],
-  '2':['1', '2'],
-  '3':['1', '2', '3'],
-  '100':['0']
-};
 
 function validateCapacity() {
   return capacityOption[roomNumberField.value].includes(capacityField.value);
@@ -80,6 +62,9 @@ function getRoomNumberFieldErrorMessage(){
   return `Слишком много гостей для ${roomNumberField.value}
     ${roomNumberField.value === '1' ? 'комнаты' : 'комнат'}`;
 }
+pristine.addValidator(priceInput, validatePrice, 'Цена ниже минимального значения');
+pristine.addValidator(roomNumberField,validateCapacity, getRoomNumberFieldErrorMessage);
+pristine.addValidator(capacityField,validateCapacity, /*getCapacityErrorMessage*/);
 
 form.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
@@ -87,6 +72,18 @@ form.addEventListener('submit', (evt) => {
     evt.preventDefault();
   }
 });
+
+// Синхронизация выбора заезда и выезда
+
+timeinSelector.addEventListener('change', (evt) => {
+  timeoutSelector.value = evt.target.value;
+});
+
+timeoutSelector.addEventListener('change', (evt) => {
+  timeinSelector.value = evt.target.value;
+});
+
+// Блокировка кнопок при отправке
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -98,10 +95,12 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
+// Отправка формы
+
 const setUserFormSubmit = (onSuccess) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    const isValid = pristine.validate();//пока убрал сеттинг начальной точки в инпуте
+    const isValid = pristine.validate();
     if (isValid) {
       blockSubmitButton();
       sendData(
@@ -119,9 +118,5 @@ const setUserFormSubmit = (onSuccess) => {
   });
 };
 
-
-pristine.addValidator(roomNumberField,validateCapacity, getRoomNumberFieldErrorMessage);
-pristine.addValidator(capacityField,validateCapacity, /*getCapacityErrorMessage*/);
-
-export{form, setUserFormSubmit};
+export{form, setUserFormSubmit, priceInput};
 
