@@ -5,7 +5,7 @@ const popupFragment = document.createDocumentFragment('span');
 
 // Генерация контента балуна
 
-const getOffer = function (array, index) {
+const getOffer = (array, index) => {
 
   const templateElementClone = templateElement.cloneNode(true);
   const templateAuthor = templateElementClone.querySelector('.popup__avatar');

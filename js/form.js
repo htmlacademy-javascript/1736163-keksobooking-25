@@ -27,9 +27,7 @@ let minPrice = 0;
 
 // Валидация формы (Pristine)
 
-typeField.addEventListener('change', minPriceThreshold);
-
-function minPriceThreshold(evt) {
+const minPriceThreshold = (evt) => {
   switch (evt.target.value) {
     case 'bungalow':
       minPrice = 0;
@@ -48,20 +46,17 @@ function minPriceThreshold(evt) {
       break;
   }
   priceInput.setAttribute('placeholder', `${minPrice}`) ;
-}
+};
 
-function validatePrice(value) {
-  return value >= minPrice;
-}
+typeField.addEventListener('change', minPriceThreshold);
 
-function validateCapacity() {
-  return capacityOption[roomNumberField.value].includes(capacityField.value);
-}
+const validatePrice = (value) => value >= minPrice;
 
-function getRoomNumberFieldErrorMessage(){
-  return `Слишком много гостей для ${roomNumberField.value}
+const validateCapacity = () => capacityOption[roomNumberField.value].includes(capacityField.value);
+
+const getRoomNumberFieldErrorMessage = () => `Слишком много гостей для ${roomNumberField.value}
     ${roomNumberField.value === '1' ? 'комнаты' : 'комнат'}`;
-}
+
 pristine.addValidator(priceInput, validatePrice, 'Цена ниже минимального значения');
 pristine.addValidator(roomNumberField,validateCapacity, getRoomNumberFieldErrorMessage);
 pristine.addValidator(capacityField,validateCapacity, /*getCapacityErrorMessage*/);
