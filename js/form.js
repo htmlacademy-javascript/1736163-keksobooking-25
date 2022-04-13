@@ -1,72 +1,122 @@
+import {sendData} from './API.js';
+import {renderSubmitErrorMessage} from './util.js';
+import {resetForm} from './reset.js';
 
-window.onload = function () {
-  const form = document.querySelector('.ad-form');
-  const typeField = form.querySelector('#type');
-  let minPrice = 0;
-
-  const pristine = new Pristine(form, {
-    classTo: 'ad-form__element',
-    errorTextParent: 'ad-form__element',
-    errorTextClass: 'error-text',
-    errorClass: 'ad-form__element--invalid',
-    successClass: 'ad-form__element--valid',
-    errorTextTag: 'span'
-  });
-
-  form.addEventListener('submit', (evt) => {
-    const isValid = pristine.validate();
-    if (!isValid) {
-      evt.preventDefault();
-    }
-  });
-
-  typeField.addEventListener('change', minPriceThreshold);
-
-  function minPriceThreshold(evt) {
-    switch (evt.target.value) {
-      case 'bungalow':
-        minPrice = 0;
-        break;
-      case 'flat':
-        minPrice = 1000;
-        break;
-      case 'hotel':
-        minPrice = 3000;
-        break;
-      case 'house':
-        minPrice = 5000;
-        break;
-      case 'palace':
-        minPrice = 10000;
-        break;
-    }
-  }
-
-  function validatePrice(value) {
-    return value >= minPrice;
-  }
-
-  pristine.addValidator(form.querySelector('#price'), validatePrice, 'Цена ниже минимального значения');
-
-  const roomNumberField = form.querySelector('[name = "rooms"]');
-  const capacityField = form.querySelector('[name = "capacity"]');
-  const capacityOption = {
-    '1':['1'],
-    '2':['1', '2'],
-    '3':['1', '2', '3'],
-    '100':['0']
-  };
-
-  function validateCapacity() {
-    return capacityOption[roomNumberField.value].includes(capacityField.value);
-  }
-
-  function getRoomNumberFieldErrorMessage(){
-    return `Слишком много гостей для ${roomNumberField.value}
-    ${roomNumberField.value === '1' ? 'комнаты' : 'комнат'}`;
-  }
-
-  pristine.addValidator(roomNumberField,validateCapacity, getRoomNumberFieldErrorMessage);
-  pristine.addValidator(capacityField,validateCapacity, /*getCapacityErrorMessage*/);
+const submitForm = document.querySelector('.ad-form');
+const typeField = submitForm.querySelector('#type');
+const submitButton = submitForm.querySelector('.ad-form__submit');
+const priceInput = submitForm.querySelector('#price');
+const roomNumberSelector = submitForm.querySelector('[name = "rooms"]');
+const capacitySelector = submitForm.querySelector('[name = "capacity"]');
+const timeinSelector = submitForm.querySelector('#timein');
+const timeoutSelector = submitForm.querySelector('#timeout');
+let minPrice = 0;
+const CapacityOption = {
+  '1':['1'],
+  '2':['1', '2'],
+  '3':['1', '2', '3'],
+  '100':['0']
 };
-export{};
+const pristine = new Pristine(submitForm, {
+  classTo: 'ad-form__element',
+  errorTextParent: 'ad-form__element',
+  errorTextClass: 'error-text',
+  errorClass: 'ad-form__element--invalid',
+  successClass: 'ad-form__element--valid',
+  errorTextTag: 'span'
+});
+
+resetForm();
+
+// Валидация формы (Pristine)
+
+const minPriceThreshold = (evt) => {
+  switch (evt.target.value) {
+    case 'bungalow':
+      minPrice = 0;
+      break;
+    case 'flat':
+      minPrice = 1000;
+      break;
+    case 'hotel':
+      minPrice = 3000;
+      break;
+    case 'house':
+      minPrice = 5000;
+      break;
+    case 'palace':
+      minPrice = 10000;
+      break;
+  }
+  priceInput.setAttribute('placeholder', `${minPrice}`) ;
+};
+
+typeField.addEventListener('change', minPriceThreshold);
+
+const validatePrice = (value) => value >= minPrice;
+
+const validateCapacity = () => CapacityOption[roomNumberSelector.value].includes(capacitySelector.value);
+
+const getRoomNumberFieldErrorMessage = () => `Слишком много гостей для ${roomNumberSelector.value}
+    ${roomNumberSelector.value === '1' ? 'комнаты' : 'комнат'}`;
+
+
+pristine.addValidator(priceInput, validatePrice, 'Цена ниже минимального значения');
+pristine.addValidator(roomNumberSelector,validateCapacity, getRoomNumberFieldErrorMessage);
+pristine.addValidator(capacitySelector,validateCapacity, /*getCapacityErrorMessage*/);
+
+submitForm.addEventListener('submit', (evt) => {
+  const isValid = pristine.validate();
+  if (!isValid) {
+    evt.preventDefault();
+  }
+});
+
+// Синхронизация выбора заезда и выезда
+
+timeinSelector.addEventListener('change', (evt) => {
+  timeoutSelector.value = evt.target.value;
+});
+
+timeoutSelector.addEventListener('change', (evt) => {
+  timeinSelector.value = evt.target.value;
+});
+
+// Блокировка кнопок при отправке
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Отправляю данные...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+// Отправка формы
+
+const setUserFormSubmit = (onSuccess) => {
+  submitForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          onSuccess();
+          unblockSubmitButton();
+        },
+        () => {
+          renderSubmitErrorMessage();
+          unblockSubmitButton();
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+};
+
+
+export{submitForm, setUserFormSubmit, priceInput};
+
