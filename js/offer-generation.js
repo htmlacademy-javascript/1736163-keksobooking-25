@@ -22,6 +22,8 @@ const getOffer = (array, index) => {
   const offerDescription = templateElementClone.querySelector('.popup__description');
   const offerPhotosList = templateElementClone.querySelector('.popup__photos');
   const templateDefaultPhoto = offerPhotosList.querySelector('img');
+  let roomDeclension = 'комнаты';
+  let guestDeclension = 'гостей';
 
   templateAuthor.src = authorPicture;
   if (authorPicture.length < 1) {
@@ -74,7 +76,13 @@ const getOffer = (array, index) => {
     offerType.classList.add('hidden');
   }
 
-  offerSpecification.textContent = `${array[index].offer.rooms } комнаты для ${array[index].offer.guests} гостей`;
+  if (Number(array[index].offer.rooms) === 1) {
+    roomDeclension = 'комната';
+  }
+  if (Number(array[index].offer.guests) === 1) {
+    guestDeclension = 'гостя';
+  }
+  offerSpecification.textContent = `${array[index].offer.rooms } ${roomDeclension} для ${array[index].offer.guests} ${guestDeclension}`;
   if (offerSpecification.textContent === ''){
     offerSpecification.classList.add('hidden');
   }
@@ -115,7 +123,6 @@ const getOffer = (array, index) => {
       templatePhoto.src = value;
     });
   }
-
   popupFragment.replaceChildren(templateElementClone);
 };
 

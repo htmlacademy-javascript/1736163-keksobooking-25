@@ -1,4 +1,7 @@
+import {form} from './form.js';
 const ALERT_SHOW_TIME = 3000;
+const successMessageTemplate = document.querySelector('#success').content;
+const errorMessageTemplate = document.querySelector('#error').content;
 
 // function getRandomNumberInclusive(min, max, decimal) {
 
@@ -32,51 +35,34 @@ const debounce = (callback, timeoutDelay) => {
 
 // Всплывающий месседж об ошибке получения и отправки данных
 
-const submitForm = document.querySelector('.ad-form__element--submit');
-const showSubmitAlert = (message) => {
-  const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 100;
-  alertContainer.style.position = 'static';
-  alertContainer.style.left = 0;
-  alertContainer.style.top = 100;
-  alertContainer.style.right = 0;
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '30px';
-  alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'black';
-  alertContainer.style.borderRadius = '100';
-  alertContainer.style.color = '#ffaa99';
-  alertContainer.style.flex = '1';
-  alertContainer.textContent = message;
-
-  submitForm.after(alertContainer);
-
+const renderFetchFailMessage = () => {
+  const fetchFailMessage = successMessageTemplate.cloneNode(true);
+  const messageTextField = fetchFailMessage.querySelector('.success__message');
+  messageTextField.textContent = 'Ошибка загрузки, попробуйте снова позже!';
+  form.appendChild(fetchFailMessage);
   setTimeout(() => {
-    alertContainer.remove();
+    const loadedSuccsessMessage = document.querySelector('.success');
+    loadedSuccsessMessage.remove();
   }, ALERT_SHOW_TIME);
 };
 
-const showLoadAlert = (message) => {
-  const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 100;
-  alertContainer.style.position = 'absolute';
-  alertContainer.style.left = 0;
-  alertContainer.style.top = 0;
-  alertContainer.style.right = 0;
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '30px';
-  alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'black';
-  alertContainer.style.borderRadius = '100';
-  alertContainer.style.color = '#ffaa99';
-  alertContainer.style.flex = '1';
-  alertContainer.textContent = message;
-
-  submitForm.after(alertContainer);
-
+const renderSubmitSuccessMessage = () => {
+  const successMessage = successMessageTemplate.cloneNode(true);
+  form.appendChild(successMessage);
   setTimeout(() => {
-    alertContainer.remove();
+    const loadedSuccsessMessage = document.querySelector('.success');
+    loadedSuccsessMessage.remove();
   }, ALERT_SHOW_TIME);
 };
 
-export{/*getRandomNumberInclusive, getRandomPositiveInteger,getRandomNumber, getRandomArrayElement*/showSubmitAlert, showLoadAlert, debounce};
+const renderSubmitErrorMessage = () => {
+  const errorMessage = errorMessageTemplate.cloneNode(true);
+  form.appendChild(errorMessage);
+  const loadedErrorMessage = document.querySelector('.error');
+  const removeButton = loadedErrorMessage.querySelector('[type="button"]');
+  removeButton.addEventListener('click', () => {
+    loadedErrorMessage.remove();
+  });
+};
+
+export{renderSubmitSuccessMessage, renderSubmitErrorMessage,renderFetchFailMessage, debounce};

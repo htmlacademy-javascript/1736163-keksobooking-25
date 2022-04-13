@@ -2,6 +2,7 @@ import { mainPinMarker, map, coordinatesInput, MAIN_PIN_MARKER_LATTITUDE, MAIN_P
 import { priceInput } from './form.js';
 import {mapFilters} from './map.js';
 import {sliderElement} from './slider.js';
+import {imagePlaceholder, offerImagePlaceholder} from './image-preview.js';
 
 const resetButton = document.querySelector('.ad-form__reset');
 const mapSelectFilters = mapFilters.querySelectorAll('select');
@@ -14,7 +15,10 @@ resetButton.addEventListener('click', () => {
     select.value = 'any';
   });
 
-  // дописать удаление картинок при резете
+  imagePlaceholder.src = 'img/muffin-grey.svg';
+  while (offerImagePlaceholder.firstChild) {
+    offerImagePlaceholder.removeChild(offerImagePlaceholder.firstChild);
+  }
 
   mapCheckboxes.forEach((checkbox) => {
     checkbox.checked = false;

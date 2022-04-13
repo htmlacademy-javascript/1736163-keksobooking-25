@@ -1,8 +1,8 @@
 import {getOffer, popupFragment} from './offer-generation.js';
-import {} from './form-state.js';
+import {enableMapForm, disableMapForm} from './form-state.js';
 import {} from './form.js';
 import {} from './map-form.js';
-import {} from './reset.js';
+import {resetForm} from './reset.js';
 
 const SIMILAR_OFFER_COUNT = 10;
 const MAIN_PIN_MARKER_LATTITUDE = 35.680111;
@@ -15,20 +15,36 @@ const housingType = mapFilters.querySelector('#housing-type');
 const housingPrice = mapFilters.querySelector('#housing-price');
 const housingRooms = mapFilters.querySelector('#housing-rooms');
 const housingGuests = mapFilters.querySelector('#housing-guests');
-const map = L.map('map-canvas')
-  .on('load', () => {
-    coordinatesInput.value = `${MAIN_PIN_MARKER_LATTITUDE} ${MAIN_PIN_MARKER_LONGITUDE}`;
+let checkboxArray = [];
+const map = L.map('map-canvas');
+
+const mapInitialisation = new Promise ((resolve) => {
+  disableMapForm();
+  resolve();
+});
+mapInitialisation.then(() => {
+  map.on('load', () => {
+    coordinatesInput.value = '35.68011, 139.76915';
   })
-  .setView({
-    lat: 35.68011,
-    lng: 139.76915,
-  }, 10);
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
+    .setView({
+      lat: 35.68011,
+      lng: 139.76915,
+    }, 10);
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+})
+  .catch (() => {
+    //'ловим ошибку';
+  })
+  .then(() => {
+    enableMapForm();
+    //'или разблокируем форму';
+  });
+
 const markerGroup = L.layerGroup().addTo(map);
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -91,6 +107,8 @@ const setTypeFilterClick = (cb) => {
   });
 };
 
+const mapFilterCheckboxes = mapFilters.querySelectorAll('[name="features"]');
+
 //Фильтрация объявлений
 
 const filterHousingType = (offerObject) => {
@@ -143,7 +161,39 @@ const filterHousingGuests = (offerObject) => {
     return false;
   }
 };
-//console.log(data[1].offer.features[0]);
+
+mapFilters.addEventListener('change', () => {
+  checkboxArray = [];
+  mapFilterCheckboxes.forEach((checkbox) => {
+    if (checkbox.checked === true) {
+      checkboxArray.push(checkbox.value);
+    }
+  });
+});
+
+const filterStuff = (offerObject) => {
+  let sum = 0;
+  checkboxArray.forEach((box) => {
+    if (offerObject.offer.features === undefined &&  checkboxArray.length > 0) {
+      sum --;
+    }
+    else if (offerObject.offer.features.includes(box)) {
+      sum ++;
+    }
+    else if (!offerObject.offer.features.includes(box)) {
+      sum -= 5;
+    }
+  });
+  if (checkboxArray.length === 0) {
+    sum ++;
+  }
+  if (sum > 0) {
+    return true;
+  }
+  else {
+    return false;
+  }
+};
 
 //Прорисовка маркеров на карте
 
@@ -151,13 +201,14 @@ const renderPoints = (data) => {
   markerGroup.clearLayers();
   serverArray.splice(0, serverArray.length);
   points.splice(0, points.length);
-  let filteredArray = data.slice();
-  filteredArray = filteredArray.filter(filterHousingType);
-  filteredArray = filteredArray.filter(filterHousingPrice);
-  filteredArray = filteredArray.filter(filterHousingRooms);
-  filteredArray = filteredArray.filter(filterHousingGuests);
-  filteredArray = filteredArray.slice(0, SIMILAR_OFFER_COUNT);
-  filteredArray.forEach((offerObject) => {
+  let Filter = data.slice();
+  Filter = Filter.filter(filterHousingType); // попробовать реализовать через .then
+  Filter = Filter.filter(filterHousingPrice);
+  Filter = Filter.filter(filterHousingRooms);
+  Filter = Filter.filter(filterHousingGuests);
+  Filter = Filter.filter(filterStuff);
+  Filter = Filter.slice(0, SIMILAR_OFFER_COUNT);
+  Filter.forEach((offerObject) => {
     serverArray.push(offerObject);
     const point = {
       title: `${offerObject.offer.title}`,
@@ -172,4 +223,3 @@ const renderPoints = (data) => {
 };
 
 export{renderPoints, coordinatesInput, mainPinMarker, map, MAIN_PIN_MARKER_LATTITUDE, MAIN_PIN_MARKER_LONGITUDE, markerGroup, setTypeFilterClick, mapFilters};
-

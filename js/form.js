@@ -1,5 +1,5 @@
 import {sendData} from './API.js';
-import {showSubmitAlert} from './util.js';
+import {renderSubmitErrorMessage} from './util.js';
 
 const form = document.querySelector('.ad-form');
 const typeField = form.querySelector('#type');
@@ -7,6 +7,9 @@ const submitButton = form.querySelector('.ad-form__submit');
 const priceInput = form.querySelector('#price');
 const roomNumberField = form.querySelector('[name = "rooms"]');
 const capacityField = form.querySelector('[name = "capacity"]');
+const timeinSelector = form.querySelector('#timein');
+const timeoutSelector = form.querySelector('#timeout');
+let minPrice = 0;
 const capacityOption = {
   '1':['1'],
   '2':['1', '2'],
@@ -21,9 +24,6 @@ const pristine = new Pristine(form, {
   successClass: 'ad-form__element--valid',
   errorTextTag: 'span'
 });
-const timeinSelector = form.querySelector('#timein');
-const timeoutSelector = form.querySelector('#timeout');
-let minPrice = 0;
 
 // Валидация формы (Pristine)
 
@@ -49,6 +49,9 @@ const minPriceThreshold = (evt) => {
 };
 
 typeField.addEventListener('change', minPriceThreshold);
+// typeField.addEventListener('change', () => {
+//   pristine.validate();
+// });
 
 const validatePrice = (value) => value >= minPrice;
 
@@ -56,6 +59,7 @@ const validateCapacity = () => capacityOption[roomNumberField.value].includes(ca
 
 const getRoomNumberFieldErrorMessage = () => `Слишком много гостей для ${roomNumberField.value}
     ${roomNumberField.value === '1' ? 'комнаты' : 'комнат'}`;
+
 
 pristine.addValidator(priceInput, validatePrice, 'Цена ниже минимального значения');
 pristine.addValidator(roomNumberField,validateCapacity, getRoomNumberFieldErrorMessage);
@@ -104,7 +108,7 @@ const setUserFormSubmit = (onSuccess) => {
           unblockSubmitButton();
         },
         () => {
-          showSubmitAlert('Не удалось отправить форму. Попробуйте ещё раз');// в утиле доработать
+          renderSubmitErrorMessage();
           unblockSubmitButton();
         },
         new FormData(evt.target),

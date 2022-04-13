@@ -23,13 +23,12 @@ imagesInput.addEventListener('change', () => { //Загружается, но н
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
   if (matches) {
     const newPhoto = document.createElement('img');
-    newPhoto.src = URL.createObjectURL(new Blob);
+    newPhoto.src = URL.createObjectURL(file);
     newPhoto.setAttribute('height', 70);
     newPhoto.setAttribute('width', 70);
-    newPhoto.setAttribute('style', 'margin-left: 10px');
     newPhoto.setAttribute('alt', 'Ваша фотография');
-    offerImagePlaceholder.replaceWith(newPhoto);
+    offerImagePlaceholder.append(newPhoto);
   }
 });
 
-export{};
+export{imagePlaceholder, offerImagePlaceholder};
