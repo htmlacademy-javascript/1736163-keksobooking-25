@@ -1,4 +1,5 @@
 import {renderSubmitSuccessMessage, renderFetchFailMessage} from './util.js';
+import {enableMapForm} from './form-state.js';
 
 const getData = (onSucsess, onFail) =>  {
   fetch('https://25.javascript.pages.academy/keksobooking/data')
@@ -12,6 +13,7 @@ const getData = (onSucsess, onFail) =>  {
     })
     .then((data) => {
       onSucsess(data);
+      enableMapForm();
     })
     .catch(() => {
       renderFetchFailMessage();

@@ -1,10 +1,8 @@
-import {form} from './form.js';
-
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-const avatarChooser = form.querySelector('#avatar');
-const imagesInput = form.querySelector('#images');
-const preview = form.querySelector('.ad-form-header__preview');
-const imagePlaceholder = preview.querySelector('img');
+const avatarChooser = document.querySelector('#avatar');
+const offerImageChooser = document.querySelector('#images');
+const previewField = document.querySelector('.ad-form-header__preview');
+const imagePlaceholder = previewField.querySelector('img');
 const offerImagePlaceholder = document.querySelector('.ad-form__photo');
 
 avatarChooser.addEventListener('change', () => {
@@ -17,8 +15,8 @@ avatarChooser.addEventListener('change', () => {
   }
 });
 
-imagesInput.addEventListener('change', () => { //Загружается, но не отображается картинка
-  const file = imagesInput.files[0];
+offerImageChooser.addEventListener('change', () => { //Загружается, но не отображается картинка
+  const file = offerImageChooser.files[0];
   const fileName = file.name.toLowerCase();
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
   if (matches) {

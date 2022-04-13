@@ -1,12 +1,10 @@
-import {priceInput} from './form.js';
-
 const sliderElement = document.querySelector('.ad-form__slider');
-const valueElement = document.querySelector('#price');
+const priceInput = document.querySelector('#price');
 
 noUiSlider.create(sliderElement, {
   range: {
-    min: Number(valueElement.min),
-    max: Number(valueElement.max),
+    min: 0,
+    max: 100000,
   },
   start: 0,
   step: 1,
@@ -22,11 +20,13 @@ noUiSlider.create(sliderElement, {
 });
 
 sliderElement.noUiSlider.on('update', () => {
-  valueElement.value = sliderElement.noUiSlider.get();
-
+  priceInput.value = sliderElement.noUiSlider.get();
 });
 
 priceInput.addEventListener('input', (evt) => {
+  if (evt.target.value === '') {
+    sliderElement.noUiSlider.set(0);
+  }
   sliderElement.noUiSlider.set(evt.target.value);
 });
 

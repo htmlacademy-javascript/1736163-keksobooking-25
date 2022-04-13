@@ -1,22 +1,23 @@
 import {sendData} from './API.js';
 import {renderSubmitErrorMessage} from './util.js';
+import {resetForm} from './reset.js';
 
-const form = document.querySelector('.ad-form');
-const typeField = form.querySelector('#type');
-const submitButton = form.querySelector('.ad-form__submit');
-const priceInput = form.querySelector('#price');
-const roomNumberField = form.querySelector('[name = "rooms"]');
-const capacityField = form.querySelector('[name = "capacity"]');
-const timeinSelector = form.querySelector('#timein');
-const timeoutSelector = form.querySelector('#timeout');
+const submitForm = document.querySelector('.ad-form');
+const typeField = submitForm.querySelector('#type');
+const submitButton = submitForm.querySelector('.ad-form__submit');
+const priceInput = submitForm.querySelector('#price');
+const roomNumberSelector = submitForm.querySelector('[name = "rooms"]');
+const capacitySelector = submitForm.querySelector('[name = "capacity"]');
+const timeinSelector = submitForm.querySelector('#timein');
+const timeoutSelector = submitForm.querySelector('#timeout');
 let minPrice = 0;
-const capacityOption = {
+const CapacityOption = {
   '1':['1'],
   '2':['1', '2'],
   '3':['1', '2', '3'],
   '100':['0']
 };
-const pristine = new Pristine(form, {
+const pristine = new Pristine(submitForm, {
   classTo: 'ad-form__element',
   errorTextParent: 'ad-form__element',
   errorTextClass: 'error-text',
@@ -24,6 +25,8 @@ const pristine = new Pristine(form, {
   successClass: 'ad-form__element--valid',
   errorTextTag: 'span'
 });
+
+resetForm();
 
 // Валидация формы (Pristine)
 
@@ -49,23 +52,20 @@ const minPriceThreshold = (evt) => {
 };
 
 typeField.addEventListener('change', minPriceThreshold);
-// typeField.addEventListener('change', () => {
-//   pristine.validate();
-// });
 
 const validatePrice = (value) => value >= minPrice;
 
-const validateCapacity = () => capacityOption[roomNumberField.value].includes(capacityField.value);
+const validateCapacity = () => CapacityOption[roomNumberSelector.value].includes(capacitySelector.value);
 
-const getRoomNumberFieldErrorMessage = () => `Слишком много гостей для ${roomNumberField.value}
-    ${roomNumberField.value === '1' ? 'комнаты' : 'комнат'}`;
+const getRoomNumberFieldErrorMessage = () => `Слишком много гостей для ${roomNumberSelector.value}
+    ${roomNumberSelector.value === '1' ? 'комнаты' : 'комнат'}`;
 
 
 pristine.addValidator(priceInput, validatePrice, 'Цена ниже минимального значения');
-pristine.addValidator(roomNumberField,validateCapacity, getRoomNumberFieldErrorMessage);
-pristine.addValidator(capacityField,validateCapacity, /*getCapacityErrorMessage*/);
+pristine.addValidator(roomNumberSelector,validateCapacity, getRoomNumberFieldErrorMessage);
+pristine.addValidator(capacitySelector,validateCapacity, /*getCapacityErrorMessage*/);
 
-form.addEventListener('submit', (evt) => {
+submitForm.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
   if (!isValid) {
     evt.preventDefault();
@@ -97,7 +97,7 @@ const unblockSubmitButton = () => {
 // Отправка формы
 
 const setUserFormSubmit = (onSuccess) => {
-  form.addEventListener('submit', (evt) => {
+  submitForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
     if (isValid) {
@@ -117,5 +117,6 @@ const setUserFormSubmit = (onSuccess) => {
   });
 };
 
-export{form, setUserFormSubmit, priceInput};
+
+export{submitForm, setUserFormSubmit, priceInput};
 

@@ -1,5 +1,3 @@
-import {} from './data.js';
-
 const templateElement = document.querySelector('#card').content;
 const popupFragment = document.createDocumentFragment('span');
 

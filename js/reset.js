@@ -1,13 +1,13 @@
-import { mainPinMarker, map, coordinatesInput, MAIN_PIN_MARKER_LATTITUDE, MAIN_PIN_MARKER_LONGITUDE} from './map.js';
-import { priceInput } from './form.js';
+import {mainPinMarker, map, coordinatesInput, MAIN_PIN_MARKER_LATTITUDE, MAIN_PIN_MARKER_LONGITUDE} from './map.js';
+import {priceInput} from './form.js';
 import {mapFilters} from './map.js';
 import {sliderElement} from './slider.js';
 import {imagePlaceholder, offerImagePlaceholder} from './image-preview.js';
 
 const resetButton = document.querySelector('.ad-form__reset');
 const mapSelectFilters = mapFilters.querySelectorAll('select');
-const housingFeaturesBlock = document.querySelector('#housing-features');
-const mapCheckboxes = housingFeaturesBlock.querySelectorAll('.map__checkbox');
+const housingFeaturesField = document.querySelector('#housing-features');
+const mapCheckboxes = housingFeaturesField.querySelectorAll('.map__checkbox');
 
 resetButton.addEventListener('click', () => {
 
@@ -47,4 +47,4 @@ function resetForm() {
   resetButton.click();
 }
 
-export{resetForm, mapFilters};
+export{resetForm};
