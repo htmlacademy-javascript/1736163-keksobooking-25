@@ -1,7 +1,7 @@
 const sliderElement = document.querySelector('.ad-form__slider');
 const priceInput = document.querySelector('#price');
 
-// Слайдер
+// Отрисовка слайдера
 
 noUiSlider.create(sliderElement, {
   range: {
