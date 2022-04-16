@@ -5,6 +5,8 @@ const previewField = document.querySelector('.ad-form-header__preview');
 const imagePlaceholder = previewField.querySelector('img');
 const offerImagePlaceholder = document.querySelector('.ad-form__photo');
 
+// Форма фотографии аватара
+
 avatarChooser.addEventListener('change', () => {
   const file = avatarChooser.files[0];
   const fileName = file.name.toLowerCase();
@@ -15,7 +17,9 @@ avatarChooser.addEventListener('change', () => {
   }
 });
 
-offerImageChooser.addEventListener('change', () => { //Загружается, но не отображается картинка
+// Форма фотографии объекта
+
+offerImageChooser.addEventListener('change', () => {
   const file = offerImageChooser.files[0];
   const fileName = file.name.toLowerCase();
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));

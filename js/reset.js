@@ -9,6 +9,8 @@ const mapSelectFilters = mapFilters.querySelectorAll('select');
 const housingFeaturesField = document.querySelector('#housing-features');
 const mapCheckboxes = housingFeaturesField.querySelectorAll('.map__checkbox');
 
+// Кнопка сброса
+
 resetButton.addEventListener('click', () => {
 
   mapSelectFilters.forEach((select) => {
