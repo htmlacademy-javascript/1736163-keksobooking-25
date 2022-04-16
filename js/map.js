@@ -1,6 +1,7 @@
 import {getOffer, popupFragment} from './offer-generation.js';
-import {disableSubmitForm} from './form-state.js';
-
+import {enableSubmitForm} from './form-state.js';
+import {markersInitialize} from './main.js';
+import {renderInitFailMessage} from './util.js';
 const SIMILAR_OFFER_COUNT = 10;
 const MAIN_PIN_MARKER_LATTITUDE = 35.680111;
 const MAIN_PIN_MARKER_LONGITUDE = 139.769152;
@@ -14,26 +15,45 @@ const housingPriceSelector = mapFilters.querySelector('#housing-price');
 const housingRoomsSelector = mapFilters.querySelector('#housing-rooms');
 const housingGuestsSelector = mapFilters.querySelector('#housing-guests');
 let checkboxArray = [];
+const map = L.map('map-canvas');
 
-const map = L.map('map-canvas')
-  .on('load', () => {
-    coordinatesInput.value = '35.68011, 139.76915';
-  })
-  .setView({
-    lat: 35.68011,
-    lng: 139.76915,
-  }, 10);
+// Инициализация карты
 
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-)
-  .on('tileerror', () => {
-    disableSubmitForm();
-  })
-  .addTo(map);
+window.addEventListener('load', () => {
+
+  const mapInitialization = new Promise((resolve, reject) => {
+    map.on('load', () => {
+      coordinatesInput.value = '35.68011, 139.76915';
+    })
+      .setView({
+        lat: 35.68011,
+        lng: 139.76915,
+      }, 10);
+
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      },
+    )
+      .on('load', () => {
+        resolve();
+      })
+      .on('tileerror', () => {
+        reject();
+      })
+      .addTo(map);
+  });
+  mapInitialization.then(() => {
+    markersInitialize();
+    enableSubmitForm();
+  });
+  mapInitialization.catch(() =>{
+    renderInitFailMessage();
+  });
+});
+
+// Маркеры
 
 const markerGroup = L.layerGroup().addTo(map);
 const mainPinIcon = L.icon({
@@ -65,6 +85,8 @@ mainPinMarker.on('moveend', (evt) => {
   const pinMarkerCoordinates = (evt.target.getLatLng());
   coordinatesInput.value = `${pinMarkerCoordinates.lat.toFixed(5) }, ${pinMarkerCoordinates.lng.toFixed(5)}`;
 });
+
+// Создание контента балуна
 
 const createCustomPopup = (point) => {
   getOffer(serverArray, points.indexOf(point));

@@ -5,11 +5,13 @@ const formInteractiveModules = submitForm.querySelectorAll('fieldset');
 const sliderElement = submitForm.querySelector('.ad-form__slider');
 const mapCheckboxField = mapFilters.querySelector('fieldset');
 
-mapFilters.classList.add('map__filters--disabled');
-mapCheckboxField.setAttribute('disabled', 'disabled');
-mapInteractiveModules.forEach((module) => {
-  module.setAttribute('disabled', 'disabled');
-});
+const disableMapForm = () => {
+  mapFilters.classList.add('map__filters--disabled');
+  mapCheckboxField.setAttribute('disabled', 'disabled');
+  mapInteractiveModules.forEach((module) => {
+    module.setAttribute('disabled', 'disabled');
+  });
+};
 
 const disableSubmitForm = () => {
   submitForm.classList.add('ad-form--disabled');
@@ -35,5 +37,5 @@ const enableSubmitForm = () => {
   sliderElement.removeAttribute('disabled', 'disabled');
 };
 
-export{enableMapForm, enableSubmitForm, disableSubmitForm};
+export{enableMapForm, enableSubmitForm, disableSubmitForm, disableMapForm};
 

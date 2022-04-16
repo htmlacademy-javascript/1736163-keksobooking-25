@@ -54,16 +54,17 @@ const minPriceThreshold = (evt) => {
 typeField.addEventListener('change', minPriceThreshold);
 
 const validatePrice = (value) => value >= minPrice;
+const validateMaxPrice = (value) => value < 100000;
 
 const validateCapacity = () => CapacityOption[roomNumberSelector.value].includes(capacitySelector.value);
 
 const getRoomNumberFieldErrorMessage = () => `Слишком много гостей для ${roomNumberSelector.value}
     ${roomNumberSelector.value === '1' ? 'комнаты' : 'комнат'}`;
 
-
+pristine.addValidator(priceInput, validateMaxPrice, 'Цена не выше 100000');
 pristine.addValidator(priceInput, validatePrice, 'Цена ниже минимального значения');
 pristine.addValidator(roomNumberSelector,validateCapacity, getRoomNumberFieldErrorMessage);
-pristine.addValidator(capacitySelector,validateCapacity, /*getCapacityErrorMessage*/);
+pristine.addValidator(capacitySelector,validateCapacity);
 
 submitForm.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
