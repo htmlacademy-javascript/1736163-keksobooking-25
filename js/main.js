@@ -1,7 +1,7 @@
 import {setUserFormSubmit} from './form.js';
 import {resetForm} from './reset.js';
 import {debounce} from './util.js';
-import {getData} from './API.js';
+import {getData} from './api.js';
 import {setTypeFilterClick, renderPoints} from './map.js';
 import {disableSubmitForm, disableMapForm} from './form-state.js';
 
