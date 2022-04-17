@@ -1,4 +1,4 @@
-import {sendData} from './API.js';
+import {sendData} from './api.js';
 import {renderSubmitErrorMessage} from './util.js';
 import {resetForm} from './reset.js';
 
@@ -10,6 +10,7 @@ const roomNumberSelector = submitForm.querySelector('[name = "rooms"]');
 const capacitySelector = submitForm.querySelector('[name = "capacity"]');
 const timeinSelector = submitForm.querySelector('#timein');
 const timeoutSelector = submitForm.querySelector('#timeout');
+const ALLOWED_MAX_PRICE = 100000;
 let minPrice = 0;
 const CapacityOption = {
   '1':['1'],
@@ -54,7 +55,7 @@ const minPriceThreshold = (evt) => {
 typeField.addEventListener('change', minPriceThreshold);
 
 const validatePrice = (value) => value >= minPrice;
-const validateMaxPrice = (value) => value < 100000;
+const validateMaxPrice = (value) => value < ALLOWED_MAX_PRICE;
 
 const validateCapacity = () => CapacityOption[roomNumberSelector.value].includes(capacitySelector.value);
 

@@ -4,7 +4,8 @@ const offerImageChooser = document.querySelector('#images');
 const previewField = document.querySelector('.ad-form-header__preview');
 const imagePlaceholder = previewField.querySelector('img');
 const offerImagePlaceholder = document.querySelector('.ad-form__photo');
-
+const PHOTO_WIDTH = 70;
+const PHOTO_HEIGHT = 70;
 // Форма фотографии аватара
 
 avatarChooser.addEventListener('change', () => {
@@ -26,8 +27,8 @@ offerImageChooser.addEventListener('change', () => {
   if (matches) {
     const newPhoto = document.createElement('img');
     newPhoto.src = URL.createObjectURL(file);
-    newPhoto.setAttribute('height', 70);
-    newPhoto.setAttribute('width', 70);
+    newPhoto.setAttribute('height', PHOTO_HEIGHT);
+    newPhoto.setAttribute('width', PHOTO_WIDTH);
     newPhoto.setAttribute('alt', 'Ваша фотография');
     offerImagePlaceholder.append(newPhoto);
   }
