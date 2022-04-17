@@ -17,4 +17,5 @@ globals:
 extends:
   "htmlacademy/vanilla"
 
-eslint no-use-before-define: ["error", { "functions": false }]
+rules
+  no-use-before-define: ["error", { "functions": false }]
