@@ -8,18 +8,18 @@ const MAIN_PIN_MARKER_LATTITUDE = 35.680111;
 const MAIN_PIN_MARKER_LONGITUDE = 139.769152;
 const DEFAULT_MAP_ZOOM = 10;
 const MIN_PRICE_CATEGORY_LOW = 0;
-const MAX_PRICE_CATEGORY_LOW = 9_999;
+const MAX_PRICE_CATEGORY_LOW = 9999;
 const LEAFLET_TILELAYER_PATH = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const LEAFLET_TILELAYER_ATTRIBUTION = 'https://www.openstreetmap.org/copyright';
-const MIN_PRICE_CATEGORY_MIDDLE = 10_000;
-const MAX_PRICE_CATEGORY_MIDDLE = 49_999;
+const MIN_PRICE_CATEGORY_MIDDLE = 10000;
+const MAX_PRICE_CATEGORY_MIDDLE = 49999;
 const MAIN_PIN_WIDTH = 52;
 const MAIN_PIN_HEIGHT = 52;
 const PIN_WIDTH = 40;
 const PIN_HEIGHT = 40;
 const PIN_CENTERPOINT = 20;
 const MAIN_PIN_CENTERPOINT = 26;
-const MIN_PRICE_CATEGORY_HIGH = 50_000;
+const MIN_PRICE_CATEGORY_HIGH = 50000;
 const COORDINATES_FIXED_DECIMAL_VALUE = 5;
 const NUMERAL_SYSTEM = 10;
 const FEATURES_MISMATCH_PENALTY = 5;
@@ -32,7 +32,7 @@ const PropertyCategoryPrice = {
   MIDDLE: 'middle',
   HIGH: 'high',
   ANY: 'any'
-}
+};
 
 const coordinatesInput = document.querySelector('#address');
 const points = [];
@@ -51,7 +51,7 @@ window.addEventListener('load', () => {
 
   const mapInitialization = new Promise((resolve, reject) => {
     map.on('load', () => {
-      coordinatesInput.value = `'${DEFAULT_MAP_VIEW_LATTITUDE}, ${DEFAULT_MAP_VIEW_LONGITUDE}'`;
+      coordinatesInput.value = `'${MAIN_PIN_MARKER_LATTITUDE}, ${MAIN_PIN_MARKER_LONGITUDE}'`;
     })
       .setView({
         lat: MAIN_PIN_MARKER_LATTITUDE,
@@ -166,18 +166,18 @@ const filterHousingType = (offerObject) => {
 };
 
 const filterHousingPrice = (offerObject) => {
-  const { offer: { price } } = offerObject
-  const { value } = housingPriceSelector
+  const { offer: { price } } = offerObject;
+  const { value } = housingPriceSelector;
 
   switch (value) {
     case PropertyCategoryPrice.LOW:
-      return price >= MIN_PRICE_CATEGORY_LOW && price <= MAX_PRICE_CATEGORY_LOW
+      return price >= MIN_PRICE_CATEGORY_LOW && price <= MAX_PRICE_CATEGORY_LOW;
     case PropertyCategoryPrice.MIDDLE:
-      return price >= MIN_PRICE_CATEGORY_MIDDLE && price <= MAX_PRICE_CATEGORY_MIDDLE
+      return price >= MIN_PRICE_CATEGORY_MIDDLE && price <= MAX_PRICE_CATEGORY_MIDDLE;
     case PropertyCategoryPrice.HIGH:
-      return price >= MIN_PRICE_CATEGORY_HIGH
+      return price >= MIN_PRICE_CATEGORY_HIGH;
     default:
-      return true
+      return true;
   }
 };
 
