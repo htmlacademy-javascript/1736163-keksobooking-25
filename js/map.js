@@ -1,7 +1,7 @@
 import {getOffer, popupFragment} from './offer-generation.js';
 import {enableSubmitForm} from './form-state.js';
-import {markersInitialize} from './main.js';
-import {renderInitFailMessage} from './util.js';
+import {initializeMarkers} from './main.js';
+import {renderInitFailMessage} from './messages.js';
 
 const SIMILAR_OFFER_COUNT = 10;
 const MAIN_PIN_MARKER_LATTITUDE = 35.680111;
@@ -34,14 +34,14 @@ const PropertyCategoryPrice = {
   ANY: 'any'
 };
 
-const coordinatesInput = document.querySelector('#address');
+const coordinatesInputElement = document.querySelector('#address');
 const points = [];
 const serverArray = [];
-const mapFilters = document.querySelector('.map__filters');
-const housingTypeSelector = mapFilters.querySelector('#housing-type');
-const housingPriceSelector = mapFilters.querySelector('#housing-price');
-const housingRoomsSelector = mapFilters.querySelector('#housing-rooms');
-const housingGuestsSelector = mapFilters.querySelector('#housing-guests');
+const mapFiltersElement = document.querySelector('.map__filters');
+const housingTypeSelectorElement = mapFiltersElement.querySelector('#housing-type');
+const housingPriceSelectorElement = mapFiltersElement.querySelector('#housing-price');
+const housingRoomsSelectorElement = mapFiltersElement.querySelector('#housing-rooms');
+const housingGuestsSelectorElement = mapFiltersElement.querySelector('#housing-guests');
 let checkboxArray = [];
 const map = L.map('map-canvas');
 
@@ -51,7 +51,7 @@ window.addEventListener('load', () => {
 
   const mapInitialization = new Promise((resolve, reject) => {
     map.on('load', () => {
-      coordinatesInput.value = `'${MAIN_PIN_MARKER_LATTITUDE}, ${MAIN_PIN_MARKER_LONGITUDE}'`;
+      coordinatesInputElement.value = `'${MAIN_PIN_MARKER_LATTITUDE}, ${MAIN_PIN_MARKER_LONGITUDE}'`;
     })
       .setView({
         lat: MAIN_PIN_MARKER_LATTITUDE,
@@ -73,7 +73,7 @@ window.addEventListener('load', () => {
       .addTo(map);
   });
   mapInitialization.then(() => {
-    markersInitialize();
+    initializeMarkers();
     enableSubmitForm();
   });
   mapInitialization.catch(() =>{
@@ -111,7 +111,7 @@ mainPinMarker.addTo(map);
 
 mainPinMarker.on('moveend', (evt) => {
   const pinMarkerCoordinates = (evt.target.getLatLng());
-  coordinatesInput.value = `${pinMarkerCoordinates.lat.toFixed(COORDINATES_FIXED_DECIMAL_VALUE) }, ${pinMarkerCoordinates.lng.toFixed(COORDINATES_FIXED_DECIMAL_VALUE)}`;
+  coordinatesInputElement.value = `${pinMarkerCoordinates.lat.toFixed(COORDINATES_FIXED_DECIMAL_VALUE) }, ${pinMarkerCoordinates.lng.toFixed(COORDINATES_FIXED_DECIMAL_VALUE)}`;
 });
 
 // Создание контента балуна
@@ -144,30 +144,18 @@ const createMarker = (point) => {
 //Создание массива пинов
 
 const setTypeFilterClick = (cb) => {
-  mapFilters.addEventListener('change', () => {
+  mapFiltersElement.addEventListener('change', () => {
     cb();
   });
 };
 
-const mapFilterCheckboxes = mapFilters.querySelectorAll('[name="features"]');
+const mapFilterCheckboxes = mapFiltersElement.querySelectorAll('[name="features"]');
 
 //Фильтрация объявлений
 
-const filterHousingType = (offerObject) => {
-  if (housingTypeSelector.value === 'any') {
-    return true;
-  }
-  else if (housingTypeSelector.value === offerObject.offer.type){
-    return true;
-  }
-  else {
-    return false;
-  }
-};
-
 const filterHousingPrice = (offerObject) => {
   const { offer: { price } } = offerObject;
-  const { value } = housingPriceSelector;
+  const { value } = housingPriceSelectorElement;
 
   switch (value) {
     case PropertyCategoryPrice.LOW:
@@ -181,38 +169,14 @@ const filterHousingPrice = (offerObject) => {
   }
 };
 
-const filterHousingRooms = (offerObject) => {
-  if (housingRoomsSelector.value === 'any') {
-    return true;
-  }
-  else if (parseInt(housingRoomsSelector.value, NUMERAL_SYSTEM) === offerObject.offer.rooms) {
-    return true;
-  }
-  else {
-    return false;
-  }
-};
+const filterHousingType = (offerObject) =>
+  housingTypeSelectorElement.value === 'any' || housingTypeSelectorElement.value === offerObject.offer.type;
 
-const filterHousingGuests = (offerObject) => {
-  if (housingGuestsSelector.value === 'any') {
-    return true;
-  }
-  else if (parseInt(housingGuestsSelector.value, NUMERAL_SYSTEM) === offerObject.offer.guests) {
-    return true;
-  }
-  else {
-    return false;
-  }
-};
+const filterHousingRooms = (offerObject) =>
+  housingRoomsSelectorElement.value === 'any' || parseInt(housingRoomsSelectorElement.value, NUMERAL_SYSTEM) === offerObject.offer.rooms;
 
-mapFilters.addEventListener('change', () => {
-  checkboxArray = [];
-  mapFilterCheckboxes.forEach((checkbox) => {
-    if (checkbox.checked === true) {
-      checkboxArray.push(checkbox.value);
-    }
-  });
-});
+const filterHousingGuests = (offerObject) =>
+  housingGuestsSelectorElement.value === 'any' || parseInt(housingGuestsSelectorElement.value, NUMERAL_SYSTEM) === offerObject.offer.guests;
 
 const filterFeatures = (offerObject) => {
   let sum = 0;
@@ -233,10 +197,16 @@ const filterFeatures = (offerObject) => {
   if (sum > 0) {
     return true;
   }
-  else {
-    return false;
-  }
 };
+
+mapFiltersElement.addEventListener('change', () => {
+  checkboxArray = [];
+  mapFilterCheckboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      checkboxArray.push(checkbox.value);
+    }
+  });
+});
 
 //Прорисовка маркеров на карте
 
@@ -245,11 +215,7 @@ const renderPoints = (data) => {
   serverArray.splice(DATA_ARRAY_SPLICE_START_VALUE, serverArray.length);
   points.splice(POINTS_ARRAY_SPLICE_START_VALUE, points.length);
   let housingOffers = data.slice();
-  housingOffers = housingOffers.filter(filterHousingType);
-  housingOffers = housingOffers.filter(filterHousingPrice);
-  housingOffers = housingOffers.filter(filterHousingRooms);
-  housingOffers = housingOffers.filter(filterHousingGuests);
-  housingOffers = housingOffers.filter(filterFeatures);
+  housingOffers = housingOffers.filter(filterHousingType).filter(filterHousingPrice).filter(filterHousingRooms).filter(filterHousingGuests).filter(filterFeatures);
   housingOffers = housingOffers.slice(0, SIMILAR_OFFER_COUNT);
   housingOffers.forEach((offerObject) => {
     serverArray.push(offerObject);
@@ -265,4 +231,4 @@ const renderPoints = (data) => {
   });
 };
 
-export{renderPoints, DEFAULT_MAP_ZOOM, coordinatesInput, mainPinMarker, map, MAIN_PIN_MARKER_LATTITUDE, MAIN_PIN_MARKER_LONGITUDE, markerGroup, setTypeFilterClick, mapFilters};
+export{renderPoints, DEFAULT_MAP_ZOOM, coordinatesInputElement, mainPinMarker, map, MAIN_PIN_MARKER_LATTITUDE, MAIN_PIN_MARKER_LONGITUDE, markerGroup, setTypeFilterClick, mapFiltersElement};

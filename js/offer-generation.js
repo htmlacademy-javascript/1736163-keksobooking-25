@@ -1,52 +1,51 @@
 const templateElement = document.querySelector('#card').content;
-const popupFragment = document.createDocumentFragment('span');
+const popupFragment = document.createDocumentFragment();
 
 // Генерация контента балуна
 
 const getOffer = (array, index) => {
 
   const templateElementClone = templateElement.cloneNode(true);
-  const templateAuthor = templateElementClone.querySelector('.popup__avatar');
+  const templateAuthorElement = templateElementClone.querySelector('.popup__avatar');
   const authorPicture = array[index].author.avatar;
-  const offerTitle = templateElementClone.querySelector('.popup__title');
-  const offerAddress = templateElementClone.querySelector('.popup__text--address');
-  const offerPrice = templateElementClone.querySelector('.popup__text--price');
-  const offerType = templateElementClone.querySelector('.popup__type');
-  const offerSpecification = templateElementClone.querySelector('.popup__text--capacity');
-  const offerTime = templateElementClone.querySelector('.popup__text--time');
-  const offerFeaturesList = templateElementClone.querySelector('.popup__features');
-  const offerFeatureList = offerFeaturesList.querySelectorAll('.popup__feature');
+  const offerTitleElement = templateElementClone.querySelector('.popup__title');
+  const offerAddressElement = templateElementClone.querySelector('.popup__text--address');
+  const offerPriceElement = templateElementClone.querySelector('.popup__text--price');
+  const offerTypeElement = templateElementClone.querySelector('.popup__type');
+  const offerSpecificationElement = templateElementClone.querySelector('.popup__text--capacity');
+  const offerTimeElement = templateElementClone.querySelector('.popup__text--time');
+  const offerFeaturesListElement = templateElementClone.querySelector('.popup__features');
+  const offerFeatureListElements = offerFeaturesListElement.querySelectorAll('.popup__feature');
   const offersList = array[index].offer.features;
-  const offerDescription = templateElementClone.querySelector('.popup__description');
-  const offerPhotosList = templateElementClone.querySelector('.popup__photos');
-  const templateDefaultPhoto = offerPhotosList.querySelector('img');
+  const offerDescriptionElement = templateElementClone.querySelector('.popup__description');
+  const offerPhotosListElement = templateElementClone.querySelector('.popup__photos');
+  const templateDefaultPhotoElement = offerPhotosListElement.querySelector('img');
   let roomDeclension = 'комнаты';
   let guestDeclension = 'гостей';
+  let habitatType = '';
 
-  templateAuthor.src = authorPicture;
+  templateAuthorElement.src = authorPicture;
   if (authorPicture.length < 1) {
-    templateAuthor.classList.add('hidden');
+    templateAuthorElement.classList.add('hidden');
   }
 
-  offerTitle.textContent = array[index].offer.title;
-  if (offerTitle.textContent === '') {
-    offerTitle.classList.add('hidden');
+  offerTitleElement.textContent = array[index].offer.title;
+  if (offerTitleElement.textContent === '') {
+    offerTitleElement.classList.add('hidden');
   }
 
-  offerAddress.textContent = `${array[index].offer.address}`;
-  if (offerAddress.textContent === '') {
-    offerAddress.classList.add('hidden');
+  offerAddressElement.textContent = `${array[index].offer.address}`;
+  if (offerAddressElement.textContent === '') {
+    offerAddressElement.classList.add('hidden');
   }
 
-  offerPrice.textContent = `${array[index].offer.price  } ₽/ночь`;
-  if (offerPrice.textContent === '') {
-    offerPrice.classList.add('hidden');
+  offerPriceElement.textContent = `${array[index].offer.price  } ₽/ночь`;
+  if (offerPriceElement.textContent === '') {
+    offerPriceElement.classList.add('hidden');
   }
 
-  let habitatType = array[index].offer.type;
-  toString(habitatType);
-  function homesteadType (type) {
-    switch (type) {
+  const homesteadType = () => {
+    switch (array[index].offer.type) {
       case 'flat':
         habitatType = 'Квартира';
         break;
@@ -66,12 +65,12 @@ const getOffer = (array, index) => {
         habitatType = '';
     }
     return habitatType;
-  }
+  };
 
   homesteadType(habitatType);
-  offerType.textContent = habitatType;
-  if (offerType.textContent === '') {
-    offerType.classList.add('hidden');
+  offerTypeElement.textContent = habitatType;
+  if (offerTypeElement.textContent === '') {
+    offerTypeElement.classList.add('hidden');
   }
 
   if (Number(array[index].offer.rooms) === 1) {
@@ -80,23 +79,23 @@ const getOffer = (array, index) => {
   if (Number(array[index].offer.guests) === 1) {
     guestDeclension = 'гостя';
   }
-  offerSpecification.textContent = `${array[index].offer.rooms } ${roomDeclension} для ${array[index].offer.guests} ${guestDeclension}`;
-  if (offerSpecification.textContent === ''){
-    offerSpecification.classList.add('hidden');
+  offerSpecificationElement.textContent = `${array[index].offer.rooms } ${roomDeclension} для ${array[index].offer.guests} ${guestDeclension}`;
+  if (offerSpecificationElement.textContent === ''){
+    offerSpecificationElement.classList.add('hidden');
   }
 
-  offerTime.textContent = `Заезд после ${array[index].offer.checkin}, выезд до ${array[index].offer.checkout}`;
-  if (offerTime.textContent === '') {
-    offerTime.classList.add('hidden');
+  offerTimeElement.textContent = `Заезд после ${array[index].offer.checkin}, выезд до ${array[index].offer.checkout}`;
+  if (offerTimeElement.textContent === '') {
+    offerTimeElement.classList.add('hidden');
   }
 
   if (offersList === undefined) {
-    offerFeaturesList.classList.add('hidden');
+    offerFeaturesListElement.classList.add('hidden');
   }
   else {
     const modifiers = offersList.map((feature) =>
       `popup__feature--${  feature}`);
-    offerFeatureList.forEach((featureListItem) => {
+    offerFeatureListElements.forEach((featureListItem) => {
       const modifier = featureListItem.classList[1];
       if (!modifiers.includes(modifier)) {
         featureListItem.remove();
@@ -104,20 +103,20 @@ const getOffer = (array, index) => {
     });
   }
 
-  offerDescription.textContent = array[index].offer.description;
-  if (offerDescription.textContent === '') {
-    offerDescription.classList.add('hidden');
+  offerDescriptionElement.textContent = array[index].offer.description;
+  if (offerDescriptionElement.textContent === '') {
+    offerDescriptionElement.classList.add('hidden');
   }
 
-  offerPhotosList.removeChild(templateDefaultPhoto);
+  offerPhotosListElement.removeChild(templateDefaultPhotoElement);
   const offerPhotoList = array[index].offer.photos;
   if (offerPhotoList === undefined) {
-    offerPhotosList.classList.add('hidden');
+    offerPhotosListElement.classList.add('hidden');
   }
   else {
     offerPhotoList.forEach((value) => {
-      const templatePhoto = templateDefaultPhoto.cloneNode(true);
-      offerPhotosList.append(templatePhoto);
+      const templatePhoto = templateDefaultPhotoElement.cloneNode(true);
+      offerPhotosListElement.append(templatePhoto);
       templatePhoto.src = value;
     });
   }

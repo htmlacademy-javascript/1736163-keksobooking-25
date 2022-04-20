@@ -1,4 +1,4 @@
-import {renderSubmitSuccessMessage, renderFetchFailMessage} from './util.js';
+import {renderSubmitSuccessMessage, renderFetchFailMessage} from './messages.js';
 import {enableMapForm} from './form-state.js';
 
 const getData = (onSucsess, onFail) =>  {
@@ -9,6 +9,7 @@ const getData = (onSucsess, onFail) =>  {
       }
       else {
         onFail();
+        throw new Error();
       }
     })
     .then((data) => {
@@ -33,9 +34,13 @@ const sendData = (onSuccess, onFail, body) => {
         renderSubmitSuccessMessage();
         onSuccess();
       }
+      else {
+        onFail();
+        throw new Error();
+      }
     })
-    .catch((err) => {
-      onFail(err);
+    .catch(() => {
+      onFail();
     });
 };
 

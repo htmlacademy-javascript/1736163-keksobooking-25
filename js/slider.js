@@ -1,9 +1,10 @@
 const sliderElement = document.querySelector('.ad-form__slider');
-const priceInput = document.querySelector('#price');
+const priceInputElement = document.querySelector('#price');
 const SLIDER_START = 0;
 const SLIDER_STEP = 1;
 const SLIDER_RANGE_MIN = 0;
 const SLIDER_RANGE_MAX = 100000;
+
 // Отрисовка слайдера
 
 noUiSlider.create(sliderElement, {
@@ -15,20 +16,16 @@ noUiSlider.create(sliderElement, {
   step: SLIDER_STEP,
   connect: 'lower',
   format: {
-    to: function (value) {
-      return value.toFixed(0);
-    },
-    from: function (value) {
-      return parseFloat(value);
-    },
+    to: (value) => value.toFixed(0),
+    from: (value) => parseFloat(value),
   },
 });
 
 sliderElement.noUiSlider.on('update', () => {
-  priceInput.value = sliderElement.noUiSlider.get();
+  priceInputElement.value = sliderElement.noUiSlider.get();
 });
 
-priceInput.addEventListener('input', (evt) => {
+priceInputElement.addEventListener('input', (evt) => {
   if (evt.target.value === '') {
     sliderElement.noUiSlider.set(SLIDER_START);
   }

@@ -1,40 +1,40 @@
-const submitForm = document.querySelector('.ad-form');
-const mapFilters = document.querySelector('.map__filters');
-const mapInteractiveModules = mapFilters.querySelectorAll('select');
-const formInteractiveModules = submitForm.querySelectorAll('fieldset');
-const sliderElement = submitForm.querySelector('.ad-form__slider');
-const mapCheckboxField = mapFilters.querySelector('fieldset');
+const submitFormElement = document.querySelector('.ad-form');
+const mapFiltersElement = document.querySelector('.map__filters');
+const mapInteractiveModulesElements = mapFiltersElement.querySelectorAll('select');
+const formInteractiveModulesElements = submitFormElement.querySelectorAll('fieldset');
+const sliderElement = submitFormElement.querySelector('.ad-form__slider');
+const mapCheckboxFieldElement = mapFiltersElement.querySelector('fieldset');
 
 const disableMapForm = () => {
-  mapFilters.classList.add('map__filters--disabled');
-  mapCheckboxField.setAttribute('disabled', 'disabled');
-  mapInteractiveModules.forEach((module) => {
+  mapFiltersElement.classList.add('map__filters--disabled');
+  mapCheckboxFieldElement.setAttribute('disabled', 'disabled');
+  mapInteractiveModulesElements.forEach((module) => {
     module.setAttribute('disabled', 'disabled');
   });
 };
 
 const disableSubmitForm = () => {
-  submitForm.classList.add('ad-form--disabled');
-  formInteractiveModules.forEach((module) => {
+  submitFormElement.classList.add('ad-form--disabled');
+  formInteractiveModulesElements.forEach((module) => {
     module.setAttribute('disabled', 'disabled');
   });
-  sliderElement.removeAttribute('disabled', 'disabled');
+  sliderElement.removeAttribute('disabled');
 };
 
 const enableMapForm = () => {
-  mapFilters.classList.remove('map__filters--disabled');
-  mapCheckboxField.removeAttribute('disabled', 'disabled');
-  mapInteractiveModules.forEach((module) => {
-    module.removeAttribute('disabled', 'disabled');
+  mapFiltersElement.classList.remove('map__filters--disabled');
+  mapCheckboxFieldElement.removeAttribute('disabled');
+  mapInteractiveModulesElements.forEach((module) => {
+    module.removeAttribute('disabled');
   });
 };
 
 const enableSubmitForm = () => {
-  submitForm.classList.remove('ad-form--disabled');
-  formInteractiveModules.forEach((module) => {
-    module.removeAttribute('disabled', 'disabled');
+  submitFormElement.classList.remove('ad-form--disabled');
+  formInteractiveModulesElements.forEach((module) => {
+    module.removeAttribute('disabled');
   });
-  sliderElement.removeAttribute('disabled', 'disabled');
+  sliderElement.removeAttribute('disabled');
 };
 
 export{enableMapForm, enableSubmitForm, disableSubmitForm, disableMapForm};
