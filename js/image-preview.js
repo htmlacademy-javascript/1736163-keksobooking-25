@@ -1,37 +1,38 @@
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-const avatarChooser = document.querySelector('#avatar');
-const offerImageChooser = document.querySelector('#images');
-const previewField = document.querySelector('.ad-form-header__preview');
-const imagePlaceholder = previewField.querySelector('img');
-const offerImagePlaceholder = document.querySelector('.ad-form__photo');
+const avatarChooserElement = document.querySelector('#avatar');
+const offerImageChooserElement = document.querySelector('#images');
+const previewFieldElement = document.querySelector('.ad-form-header__preview');
+const imagePlaceholderElement = previewFieldElement.querySelector('img');
+const offerImagePlaceholderElement = document.querySelector('.ad-form__photo');
 const PHOTO_WIDTH = 70;
 const PHOTO_HEIGHT = 70;
+
 // Форма фотографии аватара
 
-avatarChooser.addEventListener('change', () => {
-  const file = avatarChooser.files[0];
+avatarChooserElement.addEventListener('change', () => {
+  const file = avatarChooserElement.files[0];
   const fileName = file.name.toLowerCase();
 
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
   if (matches) {
-    imagePlaceholder.src = URL.createObjectURL(file);
+    imagePlaceholderElement.src = URL.createObjectURL(file);
   }
 });
 
 // Форма фотографии объекта
 
-offerImageChooser.addEventListener('change', () => {
-  const file = offerImageChooser.files[0];
+offerImageChooserElement.addEventListener('change', () => {
+  const file = offerImageChooserElement.files[0];
   const fileName = file.name.toLowerCase();
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
   if (matches) {
-    const newPhoto = document.createElement('img');
-    newPhoto.src = URL.createObjectURL(file);
-    newPhoto.setAttribute('height', PHOTO_HEIGHT);
-    newPhoto.setAttribute('width', PHOTO_WIDTH);
-    newPhoto.setAttribute('alt', 'Ваша фотография');
-    offerImagePlaceholder.append(newPhoto);
+    const newPhotoElement = document.createElement('img');
+    newPhotoElement.src = URL.createObjectURL(file);
+    newPhotoElement.setAttribute('height', PHOTO_HEIGHT);
+    newPhotoElement.setAttribute('width', PHOTO_WIDTH);
+    newPhotoElement.setAttribute('alt', 'Ваша фотография');
+    offerImagePlaceholderElement.append(newPhotoElement);
   }
 });
 
-export{imagePlaceholder, offerImagePlaceholder};
+export{imagePlaceholderElement as imagePlaceholder, offerImagePlaceholderElement as offerImagePlaceholder};

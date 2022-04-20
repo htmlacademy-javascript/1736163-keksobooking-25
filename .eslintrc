@@ -17,6 +17,6 @@ globals:
 extends:
   "htmlacademy/vanilla"
 
-rules: {
-  "no-use-before-define": ["error", {"functions": false, "variables": false}]
-}
+// rules: {
+//   "no-use-before-define": ["error", {"functions": false, "variables": false}]
+// }

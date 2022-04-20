@@ -20,11 +20,18 @@ setUserFormSubmit(resetForm);
 
 // Инициализация маркеров на карте
 
-const markersInitialize = () =>{
+const renderPointsCallback = (data) => {
+  renderPoints(data);
+};
+
+const renderPointsCallbackDebounced = debounce(renderPointsCallback, RERENDER_DELAY);
+
+const initializeMarkers = () => {
   getData((data) => {
     renderPoints(data);
-    setTypeFilterClick(debounce(() => renderPoints(data), RERENDER_DELAY));
+    setTypeFilterClick(() => renderPointsCallbackDebounced(data));
   });
 };
 
-export {markersInitialize};
+export {initializeMarkers};
+
