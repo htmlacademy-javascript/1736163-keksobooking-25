@@ -194,9 +194,7 @@ const filterFeatures = (offerObject) => {
   if (checkboxArray.length === CHECKBOX_ARRAY_EMPTY) {
     sum ++;
   }
-  if (sum > 0) {
-    return true;
-  }
+  return sum > 0;
 };
 
 mapFiltersElement.addEventListener('change', () => {
